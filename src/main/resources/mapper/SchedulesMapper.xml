@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunhao.courseschedulebackend.mapper.SchedulesMapper">
+
+    <select id="findScheduleManageVOBySemesterId" resultType="com.sunhao.courseschedulebackend.entity.vo.ScheduleManageVO">
+        SELECT
+            s.id AS scheduleId,
+            c.name AS courseName,
+            c.teacher,
+            s.location,
+            c.color,
+            CASE s.day_of_week
+                WHEN 1 THEN '周一'
+                WHEN 2 THEN '周二'
+                WHEN 3 THEN '周三'
+                WHEN 4 THEN '周四'
+                WHEN 5 THEN '周五'
+                WHEN 6 THEN '周六'
+                WHEN 7 THEN '周日'
+                END AS dayOfWeekText,
+            CONCAT('第', s.start_period, '-', s.end_period, '节') AS timeText
+        FROM
+            schedules s
+                JOIN
+            courses c ON s.course_id = c.id
+        WHERE
+            c.semester_id = #{semesterId}
+        ORDER BY
+            s.id;
+    </select>
+
+</mapper>
